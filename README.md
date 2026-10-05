@@ -6,6 +6,24 @@ is lost when the parent re-renders from the source model** - and the obvious fix
 (write the value through to the source) leaks that state into the next visit when
 screen models are cached and reused.
 
+## How to run
+
+**Demo app (Xcode):** open `Demo/Demo.xcodeproj`, pick any iPhone simulator (iOS 17+)
+and press ⌘R. The app hosts the library's consent page in real UIKit views that are
+rebuilt from the render copies after every change. Use the segmented control to pick
+**Naive**, **Write-through** or **Fixed**, then:
+
+- turn "I agree" ON and tap **Toggle hint (redraw)** - in Naive the switch snaps back
+  to OFF while Next stays enabled (the status line turns red: DESYNC);
+- tap **Leave & come back** - in Write-through the cached page comes back already ON;
+  in Fixed it survives redraws and starts from OFF on each visit.
+
+**Tests:** ⌘U in the `Demo` scheme runs the package's test target on the simulator.
+The library is Foundation-only, so `swift test` from the repo root also works on macOS
+(the demo app itself needs Xcode). The Xcode project is generated from
+`Demo/project.yml` with [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+(`cd Demo && xcodegen generate`).
+
 ## The setup
 
 - A container keeps SOURCE child models. To render, it creates `[sourceChild copy]`
