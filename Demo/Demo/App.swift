@@ -117,7 +117,24 @@ final class DemoViewController: UIViewController {
             root.trailingAnchor.constraint(equalTo: scroll.frameLayoutGuide.trailingAnchor, constant: -16),
         ])
 
+        // Launch arguments for scripted runs: `-mode naive|writethrough|fixed` picks the
+        // segment, `-autorun 1` turns "I agree" ON and then taps Toggle hint once.
+        let defaults = UserDefaults.standard
+        switch defaults.string(forKey: "mode")?.lowercased() {
+        case "writethrough", "write-through": mode = .writeThrough
+        case "fixed": mode = .fixed
+        default: break
+        }
+        modeControl.selectedSegmentIndex = mode.rawValue
         startMode()
+        if defaults.bool(forKey: "autorun") {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self else { return }
+                self.page.renderedToggle.userDidToggle(true)
+                self.render()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { self.toggleHint() }
+            }
+        }
     }
 
     // MARK: - Actions

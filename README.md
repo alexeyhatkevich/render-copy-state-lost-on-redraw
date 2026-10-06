@@ -18,6 +18,11 @@ rebuilt from the render copies after every change. Use the segmented control to 
 - tap **Leave & come back** - in Write-through the cached page comes back already ON;
   in Fixed it survives redraws and starts from OFF on each visit.
 
+**Scripted run:** the app accepts launch arguments `-mode naive|writethrough|fixed` and
+`-autorun 1` (turns "I agree" ON, then taps **Toggle hint** once), e.g.
+`xcrun simctl launch booted com.alexeyhatkevich.render-copy-state-lost-on-redraw.demo -mode fixed -autorun 1`.
+In Xcode, add them under *Edit Scheme > Run > Arguments*.
+
 **Tests:** ⌘U in the `Demo` scheme runs the package's test target on the simulator.
 The library is Foundation-only, so `swift test` from the repo root also works on macOS
 (the demo app itself needs Xcode). The Xcode project is generated from
